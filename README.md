@@ -1,105 +1,203 @@
-# Course Syllabus - Web Applications
+# Project 5: Single Page Applications [^1]
 
-## Basic Information
-*Course ID:* CSC 335
+## Setup
 
-*Term:* Spring 2023
+You should already have installed Node.js and the npm package manager on your system. If not, follow the installation instructions in [Project 0](https://github.com/btdobbs/WA/edit/main/Project/00/README.md) now.
 
-*Professor:* Todd Dobbs, btdobbs@uncc.edu
+Create a directory `project5` and extract the contents of this repository into the directory.  These files are the starter files for this assignment.
 
-*Class Schedule:* Tuesday and Thursday from 9:30 am to 10:50 am in Olin 213
+This assignment requires many node modules that contain the tools (e.g. [Webpack](https://webpack.js.org/), [Babel](https://babeljs.io/), [ESLint](https://eslint.org/)) needed to build a [ReactJS](https://reactjs.org/) web application as well as a simple Node.js web server ([ExpressJS](http://expressjs.com/)) to serve it to your browser. It also fetches [Material-UI](https://mui.com/) which contain the React components and style sheets we will be using. These modules can be fetched by running the following command in the `project5` directory:
 
-*Office Hours:* Please make a formal request (i.e. starfish)
+```sh
+npm install
+```
 
-*Optional Textbook:* None (*more on this in project 0*)
+[ReactJS](https://reactjs.org/) and [Material-UI](https://mui.com/) are fetched into the `node_modules` subdirectory even though we will be loading it into the browser rather than Node.js.
 
-## Learning Outcomes
-After successful completion of the course, a student will demonstrate knowledge of the following:
+Like the previous assignment, we can use npm to run the various tools we had it fetch. The following npm scripts are available in the `package.json` file:
 
-* An understanding of client side web applications
-  * Express an undestanding of the browser
-  * Express an undestanding of HTML
-  * Express an undestanding of CSS
-  * Express an undestanding of client side programming
-  * Express an undestanding of the DOM
-  * Express an undestanding of SPA
-  * Express an undestanding of application state
-  * Express an undestanding of security
-* An understanding of server side web applications
-  * Express an undestanding of the server
-  * Express an undestanding of server side programming
-  * Express an undestanding of application state
-  * Express an undestanding of security
-  * Express an undestanding of data persistence
+- `npm run lint` - Runs ESLint on all the project's JavaScript files. The code you submit should run ESLint without warnings.
+- `npm run build` - Runs [Webpack](https://webpack.js.org/) using the configuration file `webpack.config.js` to package all of the project's JSX files into a single JavaScript bundle in the directory `compiled`.
+- `npm run build:w` - Runs [Webpack](https://webpack.js.org/) like the `npm run build` command except it invokes webpack with [--watch](https://webpack.js.org/api/cli/#watch), so it will monitor the React components and regenerate the bundle if any of them change.
 
-## Teaching Philosophy[^1]
-Computer Science is not specific to learning a specific programming language or software package. While such things exist, they are ancillary to the core of computer science, which is above all concerned with reflecting critically and persistently on automation, computation, and information. I teach with the goal of serving our community to determine how computer science can be integrated into their lives in the future. Everything to do with this course is influenced by this goal. This includes the way the course is designed, my teaching style, and the assessments and practice I offer. If it is ever unclear to you why we are doing something, or why we’re doing it the way we are, I encourage you to ask me about it. I will be happy to explain my reasons for doing what I do and for asking of you what I ask of you. To experience learning, everyone must feel free to express any question or state any view in a way that respects all members of our community. We all benefit when our inquiries include a diversity of viewpoints, experiences, and backgrounds, and I hope you will contribute your authentic voice throughout the course.
+Your solutions for all of the problems below should be implemented in the `project5` directory.  As was done with on the previous project you will need to run a web server we provide for you by running a command in your `project5` directory:
 
-## Course Etiquette
+```sh
+node webServer.js
+```
 
-### *Be Prepared*
-A central component of education is small class sizes that enable high-quality interaction among students and between students and faculty in class. For this high-quality interaction to occur, all of us must come to class prepared. This means carefully reviewing the assigned materials, reflecting on them, and coming up with questions or insights that you would like to discuss. We will all learn together, by coming up with valuable questions and working together to make progress in answering those questions. As a general guideline, if you come to class without a question or topic that you’re eager to discuss, you’re probably underprepared for class.
+As in the last project, you can use the command:
 
-### *Be Present*
-In order to get the most out of class, you need to be a participant in the activities and not merely an observer. This means that mere physical presence in class is not enough; your psychological presence is also expected. This means listening and contributing positively to class discussions and refraining from distracting or disrespectful behavior. Psychological presence also means not being distracted by technological devices that are designed to capture your attention. Please silence your phone and put it away for the duration of class. If you have a smart watch, please put it in “do not disturb” mode.
+```sh
+node webServer.js & npm run build:w
+```
 
-## Course Policies
+to run the web server and webpack within a single command line window.
 
-### Attendance and Participation
-Whenever you are not in class, you are unable to participate and contribute to our community. Your attendance is thus encouraged at every class session.  Please arrive to class on time and plan to stay for the whole class period. Arriving to class late, or missing an extended period during a class session, will count as half of an absence for grading purposes. That said, you’re an adult. You don’t need to ask permission to use the restroom. But please plan accordingly so that you don’t have to do so frequently. If you will have multiple absences, please communicate with me or the Wellness Center about your situation.  If you miss five class sessions in a row, and I don’t hear from you or receive a formal notification regarding the absences, I will infer that you do not intend to continue attending and you will be administratively withdrawn from the course.
+## Problem 1: Create the Photo Sharing Application
 
-### Email
-I may communicate with my classes via email. I expect you to check your email regularly, and I will accordingly assume that you have received any email I send to you or to the class within 24 hours of my having sent it, regardless of whether you have responded to it. If you email me during the week, I will do my best to respond to you within 24 hours.  I normally check my email during office hours, so emails sent after that time will typically not be received until the following day.
+As starter code for your PhotoApp we provide you a skeleton (`photo-share.html` which loads `photoShare.jsx`) that can be started using the URL "http://localhost:3000/photo-share.html". The skeleton:
 
-### Academic Integrity
-All students are expected to maintain the highest standard of academic honesty and are bound by the Honor Code. A major component of your responsibility for academic integrity is to know what constitutes academic dishonesty. If you have any questions regarding whether something constitutes a breach of academic honesty, I expect you to ask me about it before it becomes an issue. Any suspected incidents of academic dishonesty will be referred to the Academic Integrity Committee for review.
+- Loads a [ReactJS](https://reactjs.org/) web application that uses [Material-UI](https://mui.com/) to layout a Master-Detail pattern as described in class. It has a header made from a [Material-UI App Bar](https://mui.com/components/app-bar/) accross the top, places a `UserList` component along the side, and has a content area beside it with either a `UserDetail` or `UserPhotos` components.
 
-### Accommodations
-You are entitled to a meaningful and effective learning experience, and I will do my best to help you have such an experience in this course. I have strived in designing this course to make it accessible to everyone, but I recognize that I may not have succeeded. I am happy to provide whatever accommodations are warranted for you to be able to succeed in this course. In order for me to provide you with the appropriate accommodations, the required paperwork needs to be completed and on file. If there is anything else that you want me to know that will help me improve your experience in this class, please do share it with me.  
+- Uses the [React Router](https://v5.reactrouter.com/) to enable deep linking for our single page application by configuring routes to three stubbed out components:
+  1. `/users` is routed to the component `UserList` in `components/userList/`
+  2. `/users/:userId` is routed to the component `UserDetail` in `components/userDetail/`
+  3. `/photos/:userId` is routed to the component `UserPhotos` in `components/userPhotos/`
+  
+  See the use of [HashRouter](https://v5.reactrouter.com/web/api/HashRouter), and [Route](https://v5.reactrouter.com/web/api/Route) in `photoShare.jsx` for details. For the stubbed out components in `components/*`, we provide an empty CSS file and a simple render function that includes some description of what it needs to do and the model data to use.
+  
+For this problem, we will continue to use our magic `models` hack to provide the model data so we display a pre-entered set of information. As before, the models can be accessed using `window.models`. The schema of the model data is defined below.
 
-### Confidentiality
-I want you to feel comfortable sharing information with me directly and through class assignments, but there are some instances in which I am required to share information with the College and some instances in which I will feel obligated to share information with appropriate College staff. If I receive information related to sexual or gender-based harassment, violence, or discrimination, I will keep the information private, but I am required to share that information with the Title IX Coordinator. Contact information for the Title IX Coordinator and for confidential resources can be found on the Title IX webpage. Additionally, if I am aware that you are struggling with something that may be traumatic or if I am concerned about your mental health or behavior, I may raise a formal flag or reach out to appropriate College staff for resources and assistance. Students may speak confidentially with the counselors in the Wellness Center. 
+Your assignment is to extend the skeleton into a working web app operating on the fake model data. Since the skeleton is already wired to either display components `UserList`, `UserDetail`, and `UserPhotos` with the appropriate parameters passed by React Router, most of the work will be implementing the stubbed out components. They should be filled in so that:
 
-## Evaluation
-I encourage you to try to be less worried about grades than you are. If you focus on grades, learning will always be a struggle. If you focus on learning, grades tend to take care of themselves.  Your grade in this class will be determined by the following components: 
-* Projects (70%)
-* Assessment (30%)
+- `components/userList` component should provide navigation to the user details of all the users in the system. The component is embedded in the side bar and should provide a list of user names so that when a name is clicked, the content view area switches to display the details of that user.
+- `components/userDetail` component is passed a `userId` in the `props.match` by React Router. The view should display the details of the user in a pleasing way along with a link to switch the view area to the photos of the user using the `UserPhotos` component.
+- `components/userPhotos` component is passed a `userId`, and should display all the photos of the specified user. It must display all of the photos belonging to that user. For each photo you must display the photo itself, the creation date/time for the photo, and all of the comments for that photo. For each comment you must display the date/time when the comment was created, the name of the user who created the comment, and the text of the comment. The creator for each comment should be a link that can be clicked to switch to the user detail page for that user.
 
-## Class Schedule[^2]
-| Week | Day | Date         | Topic                                                                                                | Project                                                             |
-| :--: | :-: | ------------ | ---------------------------------------------------------------------------------------------------- | :-----------------------------------------------------------------: |
-| 1    | 1   | Tue Feb 7    | [Introduction](https://github.com/btdobbs/WA/blob/main/Topic/01.md)                                  |                                                                     |
-|      | 2   | Thu Feb 9    | [HTML](https://github.com/btdobbs/WA/blob/main/Topic/02.md)                                          | [0 Due](https://github.com/btdobbs/WA/tree/main/Project/00)         |
-| 2    | 3   | Tue Feb 14   | [CSS](https://github.com/btdobbs/WA/blob/main/Topic/03.md)                                           |                                                                     |
-|      | 4   | Thu Feb 16   | [URL](https://github.com/btdobbs/WA/blob/main/Topic/04.md)                                           |                                                                     |
-| 3    | 5   | Tue Feb 21   | [JavaScript](https://github.com/btdobbs/WA/blob/main/Topic/05.md)                                    |                                                                     |
-|      | 6   | Thu Feb 23   | [JavaScript Programming](https://github.com/btdobbs/WA/blob/main/Topic/06.md)                        | [1 Due](https://github.com/btdobbs/WA/tree/main/Project/01)         |
-| 4    | 7   | Tue Feb 28   | [DOM](https://github.com/btdobbs/WA/blob/main/Topic/07.md)                                           |                                                                     |
-|      | 8   | Thu Mar 2    | [DOM Events](https://github.com/btdobbs/WA/blob/main/Topic/08.md)                                    | [2 Due](https://github.com/btdobbs/WA/tree/main/Project/02)         |
-| 5    | 9   | Tue Mar 7    | [UI Programming](https://github.com/btdobbs/WA/blob/main/Topic/09.md)                                |                                                                     |
-|      | 10  | Thu Mar 9    | [ReactJS](https://github.com/btdobbs/WA/blob/main/Topic/10.md)                                       | [3 Due](https://github.com/btdobbs/WA/tree/main/Project/03)         |
-| 6    | 11  | Tue Mar 14   | [SPA](https://github.com/btdobbs/WA/blob/main/Topic/11.md)                                           |                                                                     |
-|      | 12  | Thu Mar 16   | [RWD](https://github.com/btdobbs/WA/blob/main/Topic/12.md)                                           |                                                                     |
-| 7    | 13  | Tue Mar 21   | [Web Application Construction](https://github.com/btdobbs/WA/blob/main/Topic/13.md)                  |                                                                     |
-|      | 14  | Thu Mar 23   | [Browser-Server Communication](https://github.com/btdobbs/WA/blob/main/Topic/14.md)                   | [4 Due](https://github.com/btdobbs/WA/tree/main/Project/04)         |
-| 8    | 15  | Tue Mar 28   | [Web Server](https://github.com/btdobbs/WA/blob/main/Topic/15.md)                                    |                                                                     |
-|      | 16  | Thu Mar 30   | [Node.js](https://github.com/btdobbs/WA/blob/main/Topic/16.md)                                       | [5 Due](https://github.com/btdobbs/WA/tree/main/Project/05)         |
-|      |     | Tue Apr 4    | Spring Holiday                                                                                       |                                                                     |
-|      |     | Thu Apr 6    | ↓                                                                                                    |                                                                     |
-| 9    | 17  | Tue Apr 11   | [ExpressJS](https://github.com/btdobbs/WA/blob/main/Topic/17.md)                                     |                                                                     |
-|      | 18  | Thu Apr 13   | [Data Persistence](https://github.com/btdobbs/WA/blob/main/Topic/18.md)                              |                                                                     |
-| 10   | 19  | Tue Apr 18   | [Cookies and Session](https://github.com/btdobbs/WA/blob/main/Topic/19.md)                           | [6 Due](https://github.com/btdobbs/WA/tree/main/Project/06)         |
-|      | 20  | Thu Apr 20   | [Input and Validation](https://github.com/btdobbs/WA/blob/main/Topic/20.md)                          |                                                                     |
-| 11   | 21  | Tue Apr 25   | [State Management](https://github.com/btdobbs/WA/blob/main/Topic/21.md)                              |                                                                     |
-|      | 22  | Thu Apr 27   | [Security](https://github.com/btdobbs/WA/blob/main/Topic/22.md)                                      |                                                                     |
-| 12   | 23  | Tue May 2    | [Network/Session Attacks](https://github.com/btdobbs/WA/blob/main/Topic/23.md)                       | [7 Due](https://github.com/btdobbs/WA/tree/main/Project/07)         |
-|      | 24  | Thu May 4    | [Other Attacks](https://github.com/btdobbs/WA/blob/main/Topic/24.md)                                 |                                                                     |
-| 13   | 25  | Tue May 9    | [Large Scale Applications](https://github.com/btdobbs/WA/blob/main/Topic/25.md)                      |                                                                     |
-|      | 26  | Thu May 11   | [Data Centers](https://github.com/btdobbs/WA/blob/main/Topic/26.md)                                  | [8 Due](https://github.com/btdobbs/WA/tree/main/Project/08)         |
-|      |     | Mon May 15   | Assessment                                                                                           |                                                                     |
+Besides these components, you need to update the `TopBar` component in `components/topBar` as follows:
 
-***This syllabus is subject to change based on the needs of the class.  I will communicate changes in class or email.***
+- The left side of the `TopBar` should have your name.
+- The right side of the `TopBar` should provide app context by reflecting what is being shown in the main content region. For example, if the main content is displaying details on a user the toolbar should have the user's name. If it is displaying a user's photos it should say "Photos of " and the user's name.
 
-[^1]: Thanks to [Jeremy Henkel](https://www.ohio.edu/center-teaching-learning/jhenkel) for inspiration.
+The use of ReactRouter in the skeleton we provide allows for deep-linking to the different views of the application. Make sure the components you build do not break this capability. It should be possible to do a browser refresh on any view and have it come back as before. Our standard approach to building components handles deep-linking automatically. Care must be taken when doing things like sharing objects between components. A quick browser refresh test on each view will show when you broke something.
 
-[^2]: [Stanford Computer Science](https://cs.stanford.edu)
+Although you don't need to spend a lot of time on the appearance of the app, it should be neat and understandable. The information layout should be clean (e.g., it should be clear which photo each comment applies to).
+
+### Photo App Model Data
+
+For this problem we keep the magic DOM loaded model data we used in the previous project. The model consists of four types of objects: `user`, `photo`, `comment`, and `SchemaInfo` types.
+
+- Photos in the photo-sharing site are organized by user. We will represent users as an object `user` with the following properties:
+
+  | property      | description              |
+  | ------------- | ------------------------ |
+  | `_id`	        | The ID of this user      |
+  | `first_name`  |	First name of the user   |
+  | `last_name`	  | Last name of the user    |
+  | `location`	  | Location of the user     |
+  | `description` |	A brief user description |
+  | `occupation`  | Occupation of the user   |
+  
+  The DOM function `window.models.userModel(user_id)` returns the `user` object of the user with id `user_id`. The DOM function `window.models.userListModel()` returns an array with all `user` objects, one for each the users of the app.
+
+- Each user can upload multiple photos. We represent each photo by a `photo` object with the following properties:
+
+  | property    | description                                                                     |
+  | ----------- | ------------------------------------------------------------------------------- |
+  | `_id`	      | The ID for this photo                                                           |
+  | `user_id`	  | The ID of the `user` who created the photo                                      |
+  | `date_time` |	The date and time when the photo was added to the database                      |
+  | `file_name` |	Name of a file containing the actual photo (in the directory `project5/images`) |
+  | `comments`  |	An array of the `comment` objects representing the comments made on this photo  |
+
+  The DOM function `window.models.photoOfUserModel(user_id)` returns an array of the `photo` objects belonging to the user with id `user_id`.
+
+- For each photo there can be multiple comments (any user can comment on any photo). `comment` objects have the following properties:
+
+  | property      | description                                           |
+  | ------------- | ----------------------------------------------------- |
+  | `_id`	        | The ID for this comment                               |
+  | `photo_id`	  | The ID of the `photo` to which this comment belongs   |
+  | `user`	      | The `user` object of the user who created the comment |
+  | `date_time`	  | The date and time when the comment was created        |
+  | `comment`	    | The text of the comment                               |
+
+- For testing purposes we have `SchemaInfo` objects have the following properties:
+
+  | property         | description                                                |
+  | ---------------- | ---------------------------------------------------------- |
+  | `_id` 	         | The ID for this SchemaInfo                                 |
+  | `__v` 	         | Version number of the SchemaInfo object                    |
+  | `load_date_time` | The date and time when the SchemaInfo was loaded. A string |
+
+## Problem 2: Fetch model data from the web server
+
+After doing Problem 1, our photo sharing app front-end is looking like a real web application. The big barrier to be considered real is the fakery we are doing with the model data loaded as JavaScript into the DOM. In this Problem we remove this hack and have the app fetch models from the web server as would typically be done in a real application.
+
+The `webServer.js` given out with this project reads in the `Models` we were loading into the DOM in Problem 1 and makes them available using [ExpressJS](http://expressjs.com/) routes. The API exported by `webServer.js` uses HTTP GET requests to particular URLs to return the Models models. The HTTP response to these GET requests is encoded in JSON. The API is:
+
+- `/test/info`        - Returns `models.schemaInfo()`. This URL is useful for testing your model fetching method.
+- `/user/list`        - Returns `models.userListModel()`.
+- `/user/:id`         - Returns `models.userModel(id)`.
+- `/photosOfUser/:id` - Returns `models.photoOfUserModel(id)`.
+
+You can see the APIs in action by pointing your browser at above URLs. For example, the links `"http://localhost:3000/test/info"` and `"http://localhost:3000/user/list"` wiil return the JSON-encoded model data in the browser's window.
+
+To convert your app to fetch models from the web server you should implement a FetchModel function in `lib/fetchModelData.js`. The function should be declared as follows:
+
+```javascript
+     /*
+      * FetchModel - Fetch a model from the web server.
+      *   url - string - The URL to issue the GET request.
+      * Returns: a Promise that should be filled
+      * with the response of the GET request parsed
+      * as a JSON object and returned in the property
+      * named "data" of an object.
+      * If the requests has an error the promise should be
+      * rejected with an object contain the properties:
+      *    status:  The HTTP response status
+      *    statusText:  The statusText from the xhr request
+      */
+```
+
+Although there are many modules that would make implementing this function trivial, we want you to learn about the low-level details of AJAX. You may not use other libraries to implement FetchModel; you must write Javascript code that creates XMLHttpRequest DOM objects and responds to their events.
+
+Your solution needs to be able to handle multiple outstanding FetchModel requests. To demonstrate your FetchModel routine works, your web application should work so that visiting `http://localhost:3000/photo-share.html` displays the version number returned by sending an AJAX request to the `http://localhost:3000/test/info` URL. The version number should be displayed in the `TopBar` component of your app.
+
+After successfully implementing the FetchModel function in `lib/fetchModelData.js`, you should modify the code in
+
+- `components/userDetail/UserDetail.jsx`
+- `components/userList/UserList.jsx`
+- `components/userPhotos/UserPhotos.jsx`
+
+to use the FetchModel function to request the data from the server. There should be no accesses to `window.models` in your code and your app should work without the line in `photo-share.html`:
+
+```xhtml
+<script src="modelData/photoApp.js"><script>
+```
+
+## Style
+
+These requirements will be met if your problem solutions have proper MVC decomposition. In addition, your code and components must be clean and readable, and your app must be at least "reasonably nice" in appearance and convenience.
+
+Note that we are using [Material-UI](https://mui.com/), React components that implement Google's [Material Design](https://material.io/). We have used Material-UI's [Grid component](https://mui.com/components/grid/) to layout the Master-Detail pattern as described in class, and a [App Bar](https://mui.com/components/app-bar/) header for you. Although you don't need to build a fully Material Design compatible app, you should use [Material-UI](https://mui.com/) components when possible.
+
+In addition, remember to run ESLint before submitting. ESLint should raise no errors.
+
+## Extra Credit
+
+The `userPhoto`s component specifies that the display should include all of a user's photos along the photos' comments. This approach doesn't work well for users with a large numbers of photos. For extra credit you can implement a photo viewer that only shows one photo at a time (along with the photo's comments) and provides a mechanism to step forward or backward through the user's photos (i.e. a stepper).
+
+In order to get extra credit on this assignment your solution must:
+
+- Introduce the concept of "advanced features" to your photo app. On app startup "advanced features" is always disabled. The toolbar on the app should have a checkbox labelled "Enable Advanced Features" that displays the current state of "advanced features" (checked meaning advanced features is enabled) and supports changing the enable/disable state of the advanced features.
+
+- Your app should use the original photo view unless the "advanced features" have been enabled by the checkbox. If enabled, viewing the photos of a user should use the single photo with stepper functionality.
+
+- The user interface for stepping should be something obvious and the mechanism should indicate (e.g. a disabled button) if stepping is not possible in a direction because the user is at the first (for backward stepping) or last photo (for forward stepping).
+
+- Your app should allow individual photos to be bookmarked and shared by copying the URL from the browser location bar. The browser's forward and back buttons should do what would be expected. When entering the app using a deep linked URL to individual photos the stepper functionality should operate as expected.
+
+Warning: Doing this extra credit involves touching various pieces used in the non-extra credit part of the assignment. Adding new functionality guarded by a *feature flag* is common practice in web applications but has a risk in that if you break the non-extra credit part of the assignment you can fulfill less requirements overall. Take care.
+
+## Deliverables
+
+Use the standard [submission mechanism](https://github.com/btdobbs/WA/tree/main/Project/00) mechanism to submit.
+
+Your respository should include the following updated files.
+
+- components/topBar/TopBar.css
+- components/topBar/TopBar.jsx
+- components/userDetail/userDetail.css
+- components/userDetail/userDetail.jsx
+- components/userList/userList.css
+- components/userList/userList.jsx
+- components/userPhotos/userPhotos.css
+- components/userPhotos/userPhotos.jsx
+- lib/fetchModelData.js
+- photo-share.html
+- photoShare.jsx
+- styles/main.css
+
+[^1]: [Stanford Computer Science](https://cs.stanford.edu)
