@@ -1,0 +1,8 @@
+.userlist:hover {
+    cursor: pointer;
+}
+.userlink {
+    color: inherit;
+    text-decoration: none;
+}
+    
