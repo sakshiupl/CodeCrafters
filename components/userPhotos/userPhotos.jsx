@@ -1,7 +1,9 @@
 import React from 'react';
 import {
-  Typography
+  TextField,
+  Button
 } from '@mui/material';
+import { Link } from 'react-router-dom';
 import './userPhotos.css';
 
 
@@ -11,24 +13,82 @@ import './userPhotos.css';
 class UserPhotos extends React.Component {
   constructor(props) {
     super(props);
-
+    this.state = {
+      userId: this.props.match.params.userId,
+    }
   }
 
   render() {
+    const {userId} = this.state;
+    var userPhotosDetails = window.models.photoOfUserModel(userId);
     return (
-      <Typography variant="body1">
-      This should be the UserPhotos view of the PhotoShare app. Since
-      it is invoked from React Router the params from the route will be
-      in property match. So this should show details of user:
-      {this.props.match.params.userId}. You can fetch the model for the user from
-      window.models.photoOfUserModel(userId):
-        <Typography variant="caption">
-          {JSON.stringify(window.models.photoOfUserModel(this.props.match.params.userId))}
-        </Typography>
-      </Typography>
+      <div>
+        <Button
+          variant="contained"
+          size="medium"
+          component={Link}
+          to={`/users/${userId}`}
+          className="button"
+        >
+            USER DETAIL
+        </Button>
 
+        {userPhotosDetails.map((userPhotoDetail) => (
+          <div key={userPhotoDetail._id}>
+          <TextField
+          disabled
+          fullWidth
+          id="outlined-disabled"
+          label="Photo Date"
+          className="custom-field"
+          value={userPhotoDetail.date_time}
+        />
+        <img
+        src={`/images/${userPhotoDetail.file_name}`} // Replace with the URL of your image
+        alt="Description of the image"
+        className='custom-field'
+      />
+
+        {userPhotoDetail.comments && userPhotoDetail.comments.map((userComment) => (
+          <div>
+          <TextField
+          disabled
+          fullWidth
+          id="outlined-disabled"
+          label="Comment Date"
+          className="custom-field"
+          value={userComment.date_time}
+        />
+      
+        <TextField
+         disabled
+         fullWidth
+         id="outlined-disabled"
+         label="User"
+         className="custom-field"
+         value={`${userComment.user.first_name} ${userComment.user.last_name}`}
+        />
+        
+        <TextField
+         disabled
+         fullWidth
+         id="outlined-disabled"
+         label="Comment"
+         multiline
+         rows={5}
+         className="custom-field"
+         value={userComment.comment}
+        />
+         </div>
+        ))}  
+        </div>
+        ))}
+      </div>
     );
   }
 }
 
 export default UserPhotos;
+
+
+
