@@ -6,7 +6,6 @@ import {
 import { Link } from 'react-router-dom';
 import './userPhotos.css';
 
-
 /**
  * Define UserPhotos, a React componment of project #5
  */
