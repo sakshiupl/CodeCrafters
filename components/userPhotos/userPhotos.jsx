@@ -60,14 +60,18 @@ class UserPhotos extends React.Component {
           value={userComment.date_time}
         />
       
-        <TextField
-         disabled
-         fullWidth
-         id="outlined-disabled"
-         label="User"
-         className="custom-field"
-         value={`${userComment.user.first_name} ${userComment.user.last_name}`}
-        />
+               
+                    <TextField
+                      
+                      fullWidth
+                      id="outlined-disabled"
+                      component={Link}
+                      to={`/users/${userComment.user._id}`}
+                      label="User"
+                      className="custom-field user-link"
+                      value={`${userComment.user.first_name} ${userComment.user.last_name}`}
+                    />
+                 
         
         <TextField
          disabled
