@@ -5,6 +5,7 @@ import {
 } from '@mui/material';
 import { Link } from 'react-router-dom';
 import './userPhotos.css';
+import fetchModel from "../../lib/fetchModelData";
 
 /**
  * Define UserPhotos, a React componment of project #5
@@ -13,13 +14,45 @@ class UserPhotos extends React.Component {
   constructor(props) {
       super(props);
       this.state = {
-          userId: this.props.match.params.userId,
-      }
+          userId: undefined,
+          userPhotosDetails: undefined
+      };
   }
+
+  componentDidMount() {
+    const new_user_id = this.props.match.params.userId;
+    this.handleUserChange(new_user_id);
+}
+
+componentDidUpdate() {
+  const new_user_id = this.props.match.params.userId;
+  const current_user_id = this.state.userId;
+  if (current_user_id  !== new_user_id){
+      this.handleUserChange(new_user_id);
+  }
+}
+
+handleUserChange(user_id){
+  fetchModel("/photosOfUser/" + user_id)
+      .then((response) =>
+      {
+          this.setState({
+              userId : user_id,
+              userPhotosDetails: response.data
+          });
+      });
+  fetchModel("/user/" + user_id)
+      .then((response) =>
+      {
+          const new_user = response.data;
+          const main_content = "User Photos for " + new_user.first_name + " " + new_user.last_name;
+          this.props.changeTopbarContent(main_content);
+      });
+}
+
   render() {
-      const {userId} = this.state;
-      var userPhotosDetails = window.models.photoOfUserModel(userId);
-      return (
+      const {userId, userPhotosDetails } = this.state;
+      return userId ? (
         <div>
           <Button
             variant="contained"
@@ -33,7 +66,6 @@ class UserPhotos extends React.Component {
           {userPhotosDetails.map((userPhotoDetail) => (
             <div key={userPhotoDetail._id}>
               <TextField
-                // key={`photoDate_${userPhotoDetail._id}`}
                 disabled
                 fullWidth
                 id="outlined-disabled"
@@ -42,9 +74,7 @@ class UserPhotos extends React.Component {
                 value={userPhotoDetail.date_time}
               />
               <img
-                // key={`photoImage_${userPhotoDetail._id}`}
-                src={`/images/${userPhotoDetail.file_name}`} // Replace with the URL of your image
-                alt="Description of the image"
+                src={`/images/${userPhotoDetail.file_name}`}
                 className='custom-field'
               />
               {userPhotoDetail.comments && userPhotoDetail.comments.map((userComment) => (
@@ -81,6 +111,8 @@ class UserPhotos extends React.Component {
             </div>
           ))}
         </div>
+      ) : (
+        <div />
       );
   }
 }
