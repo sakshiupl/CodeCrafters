@@ -7,7 +7,7 @@
 - Sravani Kaligotla
 
 ## Developers
-- Jyotika Koneru
-- Pgnanasri 
+- Pgnanasri
+- Jyotika Koneru 
 - Danish 
 - Teja Puram
