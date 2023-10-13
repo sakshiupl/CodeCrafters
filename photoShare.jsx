@@ -17,7 +17,16 @@ import UserPhotos from './components/userPhotos/userPhotos';
 class PhotoShare extends React.Component {
   constructor(props) {
     super(props);
+    this.state = {
+      page_content: undefined
+    };
+    this.changeTopbarContent = this.changeTopbarContent.bind(this);
   }
+
+  changeTopbarContent = (page_content) => {
+    this.setState({ page_content: page_content });
+  };
+
 
   render() {
     return (
@@ -25,7 +34,7 @@ class PhotoShare extends React.Component {
       <div>
       <Grid container spacing={8}>
         <Grid item xs={12}>
-          <TopBar/>
+          <TopBar page_content={this.state.page_content} />
         </Grid>
         <div className="main-topbar-buffer"/>
         <Grid item sm={3}>
@@ -49,10 +58,10 @@ class PhotoShare extends React.Component {
                 )}
               />
               <Route path="/users/:userId"
-                render={ props => <UserDetail {...props} /> }
+                render={ props => <UserDetail {...props} changeTopbarContent={this.changeTopbarContent} /> }
               />
               <Route path="/photos/:userId"
-                render ={ props => <UserPhotos {...props} /> }
+                render ={ props => <UserPhotos {...props} changeTopbarContent={this.changeTopbarContent} /> }
               />
               <Route path="/users" component={UserList}  />
             </Switch>
