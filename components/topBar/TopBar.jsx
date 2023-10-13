@@ -39,7 +39,7 @@ class TopBar extends React.Component {
       <AppBar className="topbar-appBar" position="absolute">
         <Toolbar className='topbar'>
           <Typography variant="h5" color="inherit">
-              This is Code Crafters TopBar component
+              CodeCrafters TopBar component
           </Typography>
           <Typography variant="h5" color="inherit">
               {this.props.page_content}
