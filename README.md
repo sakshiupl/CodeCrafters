@@ -1,13 +1,13 @@
 # Scrum Team
 
-## Product Owner:
+## Product Owner
 - Sakshi Sanjay Uplanchiwar
 
-## Scrum Master:
+## Scrum Master
 - Sravani Kaligotla
 
-## Developers:
+## Developers
 - Jyotika Koneru
 - Pgnanasri 
 - Danish 
-- 
+- Teja Puram
