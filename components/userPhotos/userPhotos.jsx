@@ -5,7 +5,8 @@ import {
 } from '@mui/material';
 import { Link } from 'react-router-dom';
 import './userPhotos.css';
-import fetchModel from "../../lib/fetchModelData";
+// import fetchModel from "../../lib/fetchModelData";
+import axios from 'axios'; 
 
 /**
  * Define UserPhotos, a React componment of project #5
@@ -33,7 +34,7 @@ componentDidUpdate() {
 }
 
 handleUserChange(user_id){
-  fetchModel("/photosOfUser/" + user_id)
+  axios.get("/photosOfUser/" + user_id)
       .then((response) =>
       {
           this.setState({
@@ -41,7 +42,7 @@ handleUserChange(user_id){
               userPhotosDetails: response.data
           });
       });
-  fetchModel("/user/" + user_id)
+  axios.get("/user/" + user_id)
       .then((response) =>
       {
           const new_user = response.data;
