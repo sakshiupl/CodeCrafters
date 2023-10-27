@@ -55,6 +55,7 @@ Promise.all(removePromises)
         location: user.location,
         description: user.description,
         occupation: user.occupation,
+        _id: user._id,
       })
         .then(function (userObj) {
           // Set the unique ID of the object. We use the MongoDB generated _id
@@ -90,6 +91,7 @@ Promise.all(removePromises)
           file_name: photo.file_name,
           date_time: photo.date_time,
           user_id: mapFakeId2RealId[photo.user_id],
+          _id: photo._id,
         })
           .then(function (photoObj) {
             photo.objectID = photoObj._id;
@@ -100,6 +102,7 @@ Promise.all(removePromises)
                     comment: comment.comment,
                     date_time: comment.date_time,
                     user_id: comment.user.objectID,
+                    user: models.photoOfUserModel(JSON.stringify(photo.user_id)),
                   },
                 ]);
                 console.log(
