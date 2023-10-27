@@ -189,18 +189,18 @@ app.get("/user/:id", function (request, response) {
   });
 });
 
+
 /**
  * URL /photosOfUser/:id - Returns the Photos for User (id).
  */
-app.get('/photosOfUser/:id', function (request, response) {
+app.get("/photosOfUser/:id", function (request, response) {
   const id = request.params.id;
-  
   Photo.aggregate([
     { $match:
           {user_id: {$eq: new mongoose.Types.ObjectId(id)}}
     },
     { $addFields: {
-      comments: { $ifNull : ["$comments", []] }
+      comments: { $ifNull : ["$comments",[]]}
     } },
     { $lookup: {
         from: "users",
@@ -242,17 +242,23 @@ app.get('/photosOfUser/:id', function (request, response) {
         "comments.user.__v": 0
       } }
   ], function (err, photos) {
-      if (err !== null) {
-          response.status(400).send("ERROR");
-          // return;
-      } else if (photos.length === 0) {
-          response.status(400).send("NO SUCH PHOTOS");
-          // return;
-      } 
-      response.end(JSON.stringify(photos));
+    if (err) {
+      // Query returned an error. We pass it back to the browser with an
+      // Internal Service Error (500) error code.
+      console.error("Error in /photosOfUser/:id", err);
+      response.status(500).send(JSON.stringify(err));
+      return;
+    }
+    if (photos.length === 0) {
+      // Query didn't return an error but didn't find the SchemaInfo object -
+      // This is also an internal error return.
+      response.status(400).send();
+      return;
+    }
+    // We got the object - return it in JSON format.
+    response.end(JSON.stringify(photos));
   });
 });
-
 const server = app.listen(3000, function () {
   const port = server.address().port;
   console.log(
