@@ -3,7 +3,8 @@ import {
   AppBar, Toolbar, Typography
 } from '@mui/material';
 import './TopBar.css';
-import fetchModel from "../../lib/fetchModelData";
+// import fetchModel from "../../lib/fetchModelData";
+import axios from 'axios'; 
 
 /**
  * Define TopBar, a React componment of project #5
@@ -23,7 +24,7 @@ class TopBar extends React.Component {
  handleAppVersionChange(){
     const app_version = this.state.app_version;
     if (app_version === undefined){
-        fetchModel("/test/info")
+        axios.get("/test/info")
             .then((response) =>
             {
                 this.setState({
