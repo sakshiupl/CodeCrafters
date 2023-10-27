@@ -5,8 +5,8 @@ import {
 } from '@mui/material';
 import './userDetail.css';
 import { Link } from 'react-router-dom';
-import fetchModel from "../../lib/fetchModelData";
-
+// import fetchModel from "../../lib/fetchModelData";
+import axios from 'axios'; 
 
 /**
  * Define UserDetail, a React component of project #5
@@ -33,7 +33,7 @@ componentDidUpdate() {
 }
 
 handleUserChange(user_id){
-        fetchModel("/user/" + user_id)
+        axios.get("/user/" + user_id)
             .then((response) =>
             {
                 const new_user = response.data;
