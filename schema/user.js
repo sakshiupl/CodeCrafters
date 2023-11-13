@@ -1,6 +1,6 @@
 "use strict";
 
-const mongoose = require("mongoose");
+var mongoose = require("mongoose");
 
 /**
  * Define the Mongoose Schema for a Comment.
@@ -11,6 +11,8 @@ const userSchema = new mongoose.Schema({
   location: String,
   description: String,
   occupation: String,
+  login_name: String,
+  password: String
 });
 
 /**
@@ -22,3 +24,5 @@ const User = mongoose.model("User", userSchema);
  * Make this available to our application.
  */
 module.exports = User;
+
+
