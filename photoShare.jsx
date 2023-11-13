@@ -7,26 +7,39 @@ import {
   Grid, Typography, Paper
 } from '@mui/material';
 import './styles/main.css';
+import {Redirect} from "react-router";
 
 // import necessary components
 import TopBar from './components/topBar/TopBar';
 import UserDetail from './components/userDetail/userDetail';
 import UserList from './components/userList/userList';
 import UserPhotos from './components/userPhotos/userPhotos';
+import LoginRegister from "./components/loginRegister/loginRegister";
+
 
 class PhotoShare extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      page_content: undefined
+      page_content: undefined,
+      user: undefined
     };
     this.changeTopbarContent = this.changeTopbarContent.bind(this);
+    this.changeUser = this.changeUser.bind(this);
   }
 
   changeTopbarContent = (page_content) => {
     this.setState({ page_content: page_content });
   };
 
+  isUserLoggedIn(){
+    return this.state.user !== undefined;
+  }
+
+  changeUser = (user) => {
+    this.setState({user: user});
+    if (user === undefined) this.changeTopbarContent(undefined);
+  };
 
   render() {
     return (
@@ -34,31 +47,61 @@ class PhotoShare extends React.Component {
       <div>
       <Grid container spacing={8}>
         <Grid item xs={12}>
-          <TopBar page_content={this.state.page_content} />
+          <TopBar page_content={this.state.page_content} user={this.state.user} changeUser={this.changeUser} />
         </Grid>
         <div className="main-topbar-buffer"/>
         <Grid item sm={3}>
           <Paper className="main-grid-item">
-            <UserList />
+            {
+              this.isUserLoggedIn() ? <UserList/> : <div></div>
+            }
           </Paper>
         </Grid>
         <Grid item sm={9}>
           <Paper className="main-grid-item">
             <Switch>
-            <Route exact path="/"
+              {this.isUserLoggedIn() ?
+                (
+                <Route path="/users/:userId"
+                  render={ props => <UserDetail {...props} changeTopbarContent={this.changeTopbarContent} /> }
+                />
+                )
+              :
+                <Redirect path="/users/:userId" to="/login-register" />}
+              {
+              this.isUserLoggedIn() ?
+              (
+              <Route path="/photos/:userId"
+                render ={ props => <UserPhotos {...props} changeTopbarContent={this.changeTopbarContent} /> }
+              />
+              )
+              :
+                    <Redirect path="/photos/:userId" to="/login-register" />
+              }
+              {this.isUserLoggedIn() ?
+              (
+              <Route exact path="/"
+                  render={() => (
+                  <Typography variant="body1">
+                    Welcome to CodeCrafters photosharing app!
+                  </Typography>
+                )}
+              />
+              )
+              :<Route path="/login-register" render ={ props => <LoginRegister {...props} changeUser={this.changeUser}/> } />}
+              {this.isUserLoggedIn() ?
+              (
+                <Route exact path="/"
                 render={() => (
                 <Typography variant="body1">
                   Welcome to CodeCrafters photosharing app!
                 </Typography>
                 )}
-              />
-              <Route path="/users/:userId"
-                render={ props => <UserDetail {...props} changeTopbarContent={this.changeTopbarContent} /> }
-              />
-              <Route path="/photos/:userId"
-                render ={ props => <UserPhotos {...props} changeTopbarContent={this.changeTopbarContent} /> }
-              />
-              <Route path="/users" component={UserList}  />
+                />
+              )
+                :
+                <Route path="/" render ={ props => <LoginRegister {...props} changeUser={this.changeUser}/> } />}
+              {/* <Route path="/users" component={UserList}  /> */}
             </Switch>
           </Paper>
         </Grid>
